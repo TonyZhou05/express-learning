@@ -93,4 +93,26 @@ app.get('/login', (req, res, next)=>{
     res.render("login");
 })
 
+app.get('/statement', (req, res, next)=>{
+    // This will render the statement IN the browser
+    // res.sendFile(path.join(__dirname,'userStatements/BankStatementChequing.png'));
+    // App has a download method! Takes 2 args
+    // 1. filename
+    // 2. optioanlly, what you want the filename to download as
+    
+    // Download is setting the headers!
+    // 1. content-disposition to attachment, with a filename of the 2nd arg
+    res.download(path.join(__dirname,'userStatements/BankStatementChequing.png'), 'statement.png', (err)=>{
+        // If there is an error in sending the file, headers may already being sent
+        if (err){
+            if (!res.headersSent){
+                // res.headerSent is a bool, true if headers are already sent
+                res.redirect('/download/fail');
+            }
+        }
+    }); 
+
+    // attachment only sets the headers for content-disposition to attachment
+})
+
 app.listen(3000);
